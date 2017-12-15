@@ -105,12 +105,13 @@ def main():
     rfeatureMatrixLuad, labelVectorLuad = cleanup_inputs(rawFeaturesLuad, rawLabelsLuad)
     
     # Naive Bayes Feature Select
-    bestIndices = np.array([201, 56, 83, 123, 42, 103, 250, 234, 217, 98, 194, 95, 113, 111, 127, 7, 50, 101, 246, 29, 30, 130, 225, 141, 78])
-    #bestIndices = np.array([35, 14, 21, 32, 27, 28, 20, 11, 34, 3, 64, 57, 25, 58, 16, 24, 46, 31, 23, 1, 2, 50, 0, 26 ])
-    rfeatureMatrix = rfeatureMatrix[:,bestIndices]
-    rfeatureMatrixLuad = rfeatureMatrixLuad[:,bestIndices]
+    #bestIndices = np.array([201, 67, 56, 122, 123, 83, 103, 42, 217, 234, 98, 250, 95, 194, 210, 178, 113, 134, 127, 111, 270, 262, 162, 266, 115])
+    #bestIndices = np.array([35, 14, 21, 29, 65, 22, 17, 32, 13, 27, 66, 28, 20, 11, 15, 41, 34,  3, 64, 63, 67, 57, 25, 58, 16 ])
+    #rfeatureMatrix = rfeatureMatrix[:,bestIndices]
+    #rfeatureMatrixLuad = rfeatureMatrixLuad[:,bestIndices]
     
     # More refining
+    print(rfeatureMatrix.shape)
     ufeatureMatrix, ufeatureMatrixLuad = remove_useless_features( rfeatureMatrix, rfeatureMatrixLuad )
     featureMatrix, featureMatrixLuad = normalize_features( ufeatureMatrix, ufeatureMatrixLuad )
     featureMatrix, featureMatrixLuad = pca_features( featureMatrix, featureMatrixLuad )

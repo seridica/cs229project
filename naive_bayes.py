@@ -113,19 +113,19 @@ def best_features(state, tokenlist):
     
     # Compute the score for spam words
     for i in range(N):
-        tokenscores[i] = np.log(state[i,1]) - np.log(state[-2,1]) - ( np.log(state[i,0]) - np.log(state[-2,0]) )
+        tokenscores[i] = np.abs( np.log(state[i,1]) - np.log(state[-2,1]) - ( np.log(state[i,0]) - np.log(state[-2,0]) ) )
         
     # Sort
     indices = np.argsort(tokenscores)
     
     # Print top 5
     print("\nMost Predictive: ")
-    for i in range(5):
+    for i in range(25):
         print(tokenlist[indices[-(1+i)]])
         
     # Print bottom 5
     print("\nLeast Predictive: ")
-    for i in range(10):
+    for i in range(5):
         print(tokenlist[indices[i]])
         
     return np.flip(indices, 0)
@@ -142,10 +142,10 @@ def main():
     """
     Build feature matrix - Change the function to use a different feature set
     """
-    rawFeatures = num_mutations_per_gene(tcgaDict)
-    rawFeaturesLuad = num_mutations_per_gene(luadDict)
-    genes = pickle.load(open(dataPath + "\genes.pickle", "rb"))
-    tokenList = list(genes.keys())[:-1]
+    #rawFeatures = num_mutations_per_gene(tcgaDict)
+    #rawFeaturesLuad = num_mutations_per_gene(luadDict)
+    #genes = pickle.load(open(dataPath + "\genes.pickle", "rb"))
+    #tokenList = list(genes.keys())[:-1]
     
     #rawFeatures = num_mutation_type(tcgaDict)
     #rawFeaturesLuad = num_mutation_type(luadDict)
@@ -162,13 +162,13 @@ def main():
     #mutList = pickle.load(open(dataPath + "\mutationList.pickle", "rb"))
     #tokenList = list(mutList.keys())
     
-    #rawFeatures = num_eff_per_gene(tcgaDict, False, False)
-    #rawFeaturesLuad = num_eff_per_gene(luadDict, False, False)
-    #genes = pickle.load(open(dataPath + "\genes.pickle", "rb"))
-    #effs = pickle.load(open(dataPath + "\mutationEffects.pickle", "rb"))
-    #geneList = list(genes.keys())[:-1]
-    #effList = list(effs.keys())[1:-2]
-    #tokenList = [x + y for x in geneList for y in effList]
+    rawFeatures = num_eff_per_gene(tcgaDict, False, False)
+    rawFeaturesLuad = num_eff_per_gene(luadDict, False, False)
+    genes = pickle.load(open(dataPath + "\genes.pickle", "rb"))
+    effs = pickle.load(open(dataPath + "\mutationEffects.pickle", "rb"))
+    geneList = list(genes.keys())[:-1]
+    effList = list(effs.keys())[1:-2]
+    tokenList = [x + y for x in geneList for y in effList]
     
     # Build label vector (make label vector -1, 1)
     rawLabels = binary_labels(tcgaDict)

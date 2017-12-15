@@ -473,8 +473,8 @@ def main():
     #rfeatureMatrix, labelVector, rfeatureMatrixLuad, labelVectorLuad = redist_data(rfeatureMatrix, labelVector, rfeatureMatrixLuad, labelVectorLuad)
     
     # Naive Bayes Feature Select
-    #bestIndices = np.array([201, 56, 83, 123, 42, 103, 250, 234, 217, 98, 194, 95, 113, 111, 127, 7, 50, 101, 246, 29, 30, 130, 225, 141, 78])
-    #bestIndices = np.array([35, 14, 21, 32, 27, 28, 20, 11, 34, 3, 64, 57, 25, 58, 16, 24, 46, 31, 23, 1, 2, 50, 0, 26 ])
+    #bestIndices = np.array([201, 67, 56, 122, 123, 83, 103, 42, 217, 234, 98, 250, 95, 194, 210, 178, 113, 134, 127, 111, 270, 262, 162, 266, 115])
+    #bestIndices = np.array([35, 14, 21, 29, 65, 22, 17, 32, 13, 27, 66, 28, 20, 11, 15, 41, 34,  3, 64, 63, 67, 57, 25, 58, 16 ])
     #rfeatureMatrix = rfeatureMatrix[:,bestIndices]
     #rfeatureMatrixLuad = rfeatureMatrixLuad[:,bestIndices]
     
@@ -487,7 +487,9 @@ def main():
             
     p = np.random.permutation(len(labelVector))
     
-    for i in range(200):
+    bestTrainAcc = 0
+    bestTestAcc = 0
+    for i in range(100):
         #testAccuracy, featureList = forward_select_simple( featureMatrix[p[100:],:], labelVector[p[100:],:], featureMatrix[p[:100],:], labelVector[p[:100],:], kernelType, gamma, C )
         #testAccuracy, featureList = forward_select_simple( featureMatrix, labelVector, featureMatrixLuad, labelVectorLuad, kernelType, 'auto', 1 )
         testAccuracy, featureList = forward_select_10fold( featureMatrix, labelVector, kernelType, 'auto', 1 )
@@ -517,7 +519,20 @@ def main():
         testAcc = assess_accuracy( clf, bestFeaturesLuad, labelVectorLuad )
         print("; Testing Accuracy", end="")
         print(testAcc)
-        
+            
+        if testAcc >= bestTestAcc:
+            if (testAcc > bestTestAcc or trainAcc >= bestTrainAcc):
+                bestTrainAcc = trainAcc
+                bestTestAcc = testAcc
+                ## SAVE DATA
+                #pickleOut = open("unregularized.pickle", "wb")
+                pickleOut = open("ffs.pickle", "wb")
+                pickle.dump(clf, pickleOut)
+                pickleOut.close()
+                pickleOut1 = open("ffs_history.pickle", "wb")
+                pickle.dump(testAccuracy, pickleOut1)
+                pickleOut1.close()
+                
     return 0
 
 if __name__ == '__main__':

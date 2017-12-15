@@ -334,10 +334,8 @@ def main():
     #featureMatrix, labelVector, featureMatrixLuad, labelVectorLuad = redist_data(featureMatrix, labelVector, featureMatrixLuad, labelVectorLuad)
     
     # From Naive Bayes, reduce feature set
-    #bestIndices = np.array([201, 56, 83, 123, 42, 103, 250, 234, 217, 98, 194, 95, 113, 111, 127, 7, 50, 101, 246, 29, 30, 130, 225, 141, 78])
-    #bI = np.array([35, 14, 21, 32, 27, 28, 20, 11, 34, 3, 64, 57, 25, 58, 16, 24, 46, 31, 23, 1, 2, 50, 0, 26 ])
-#    bI = np.array([35, 14, 21, 32, 27, 28, 20, 11, 34, 3])
-#    bestIndices = np.zeros(len(bI)*4)
+    #bestIndices = np.array([201, 67, 56, 122, 123, 83, 103, 42, 217, 234, 98, 250, 95, 194, 210, 178, 113, 134, 127, 111, 270, 262, 162, 266, 115])
+    #bestIndices = np.array([35, 14, 21, 29, 65, 22, 17, 32, 13, 27, 66, 28, 20, 11, 15, 41, 34,  3, 64, 63, 67, 57, 25, 58, 16 ])
 #    for i in range(len(bI)):
 #        bestIndices[(i*4)] = bI[i]*4
 #        bestIndices[(i*4)+1] = bI[i]*4+1
@@ -363,15 +361,15 @@ def main():
     
     bestTestAcc = 0
     bestTrainAcc = 0
-    for i in range(5000):
+    for i in range(20000):
         p = np.random.permutation(len(labelVector))
         tData = featureMatrix[p,:]
         tLabels = trueLabels[p,:]
     
-        devData = tData[0:100,:]
-        devLabels = tLabels[0:100,:]
-        trainData = tData[100:,:]
-        trainLabels = tLabels[100:,:]
+        devData = tData[0:50,:]
+        devLabels = tLabels[0:50,:]
+        trainData = tData[50:,:]
+        trainLabels = tLabels[50:,:]
     
         mean = np.mean(tData)
         std = np.std(tData)
@@ -398,14 +396,26 @@ def main():
             print('Test accuracy: %f' % accuracy)
             
             if accuracy >= bestTestAcc:
-                bestTestAcc = accuracy
-                if accur >= bestTrainAcc:
+                if (accuracy > bestTestAcc or accur >= bestTrainAcc):
                     bestTrainAcc = accur
+                    bestTestAcc = accuracy
                     ## SAVE DATA
                     #pickleOut = open("unregularized.pickle", "wb")
                     pickleOut = open("neural_network_params.pickle", "wb")
                     pickle.dump(params, pickleOut)
                     pickleOut.close()
+                    pickleOut1 = open("nn_trainfeat.pickle", "wb")
+                    pickle.dump(trainData, pickleOut1)
+                    pickleOut1.close()
+                    pickleOut2 = open("nn_trainlab.pickle", "wb")
+                    pickle.dump(trainLabels, pickleOut2)
+                    pickleOut2.close()
+                    pickleOut3 = open("nn_devfeat.pickle", "wb")
+                    pickle.dump(devData, pickleOut3)
+                    pickleOut3.close()
+                    pickleOut4 = open("nn_devlab.pickle", "wb")
+                    pickle.dump(devLabels, pickleOut4)
+                    pickleOut4.close()
         #print(params)
         del params
         del devData
