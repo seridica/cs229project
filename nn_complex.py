@@ -361,7 +361,7 @@ def main():
     
     bestTestAcc = 0
     bestTrainAcc = 0
-    for i in range(20000):
+    for i in range(1000):
         p = np.random.permutation(len(labelVector))
         tData = featureMatrix[p,:]
         tLabels = trueLabels[p,:]
